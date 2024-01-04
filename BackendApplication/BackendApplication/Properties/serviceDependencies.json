@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DatabaseContext",
+      "dynamicId": null
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": null
+    }
+  }
+}

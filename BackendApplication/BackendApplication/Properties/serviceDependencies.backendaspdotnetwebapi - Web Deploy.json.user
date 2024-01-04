@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2024-01-03T09:15:41.2547435Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2024-01-03T10:07:30.574557Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "dd03692f-9af0-4465-86c3-fcbacb307bc6"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "FullStackProject"
+    }
+  }
+}

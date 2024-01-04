@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/backendaspdotnetwebapi/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDatabaseContext_CAC5061EC3",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fullstackdbserver/databases/FullStackDB",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DatabaseContext",
+      "dynamicId": null
+    },
+    "appInsights1": {
+      "ignored": "true",
+      "type": "appInsights"
+    }
+  }
+}
