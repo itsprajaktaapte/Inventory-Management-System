@@ -12,7 +12,8 @@ function Store()
     const[address,setAddress] = useState("");
 
     const [open, setOpen] = useState(false)
-    const [newopen, newsetOpen] = useState(false)
+    const [editopen, editsetOpen] = useState(false)
+    const [deleteopen, deletesetOpen] = useState(false)
 
     const [store, setStores] = useState([]);
     
@@ -196,7 +197,11 @@ function Store()
                     
                  <Table.Cell> 
 
-     <Modal trigger={<Button color='yellow' onClick={() => editStore(store)} >Edit </Button>} >
+     <Modal 
+      onClose={() => editsetOpen(false)}
+      onOpen={() => editsetOpen(true)}
+      open={editopen}
+     trigger={<Button color='yellow' onClick={() => editStore(store)} >Edit </Button>} >
       <Modal.Header>Edit store</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -241,7 +246,7 @@ function Store()
       </Modal.Content>
       <Modal.Actions>
         <Button color='green' onClick={update}>Edit</Button>
-        <Button color='black'>Cancel</Button>
+        <Button color='black' onClick={() => editsetOpen(false)}>Cancel</Button>
       </Modal.Actions>
     </Modal>
 
@@ -251,9 +256,9 @@ function Store()
                 <Table.Cell>
 
       <Modal 
-       onnewClose={() => newsetOpen(false)}
-       onnewOpen={() => newsetOpen(true)}
-       newopen={newopen}
+         onClose={() => deletesetOpen(false)}
+         onOpen={() => deletesetOpen(true)}
+         open={deleteopen}
       trigger={<Button color='red'>Delete </Button>} >
       <Modal.Header>Delete store</Modal.Header>
       <Modal.Content>
@@ -262,7 +267,7 @@ function Store()
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => newsetOpen(false)}>
+        <Button color='black' onClick={() => deletesetOpen(false)}>
           Cancel
         </Button>
         <Button color='red' onClick={() => DeleteStore(store.id)}>Delete</Button>

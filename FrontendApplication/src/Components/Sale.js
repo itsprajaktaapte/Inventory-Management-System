@@ -5,13 +5,14 @@ import { Button, Modal ,Form,Table } from 'semantic-ui-react';
 function Sale(){
 
    const[id, setId] = useState("");
-   const[custname, setCustName] = useState("");
-   const[prodname, setProdName] = useState("");
-   const[storename, setStoreName] = useState("");
-   const[solddate, setSoldDate] = useState("");
+   const[customerName, setcustomerName] = useState("");
+   const[productName, setproductName] = useState("");
+   const[storeName, setstoreName] = useState("");
+   const[datesold, setdatesold] = useState("");
 
    const [open, setOpen] = useState(false);
-   const [newopen, newsetOpen] = useState(false);
+   const [editopen, editsetOpen] = useState(false)
+   const [deleteopen, deletesetOpen] = useState(false)
 
    const[sale, setSales] = useState([]);
 
@@ -22,10 +23,18 @@ function Sale(){
 
    async function Load()
    {
-     const result = await axios.get("https://localhost:7133/api/Sale/GetSale");
-     setSales(result.data);
-     console.log(result.data);
-   }
+    try
+    {
+      const result = await axios.get("https://localhost:7133/api/Sale/GetSale");
+      setSales(result.data);
+      console.log(result.data);  
+     
+     }
+   catch(error) 
+     {
+      console.log(error.toJSON());
+     }
+  }
 
    async function save(event)
    {
@@ -34,17 +43,17 @@ function Sale(){
 
         await axios.post("https://localhost:7133/api/Sale/AddSale",
         {
-            custname: custname,
-            prodname: prodname,
-            storename: storename,  
-            solddate: solddate,
+            customerName: customerName,
+            productName: productName,
+            storeName: storeName,  
+            datesold: datesold,
         });
         alert("sale is marked successfully");
         setId("");
-        setCustName("");
-        setProdName("");
-        setStoreName("");
-        setSoldDate("");
+        setcustomerName("");
+        setproductName("");
+        setstoreName("");
+        setdatesold("");
 
         Load();
 
@@ -59,10 +68,10 @@ function Sale(){
      async function editSale(sale)
      {
         setId(sale.id);
-        setCustName(sale.custname);
-        setProdName(sale.prodname);
-        setStoreName(sale.storename);
-        setSoldDate(sale.solddate);
+        setcustomerName(sale.customerName);
+        setproductName(sale.productName);
+        setstoreName(sale.storeName);
+        setdatesold(sale.datesold);
      }
 
 
@@ -71,21 +80,21 @@ function Sale(){
         event.preventDefault();
         try 
         {    
-           await axios.patch("https://localhost:7133/api/Sale/UpdateSale/" + sale.find((u) => u.id === id).id || id,
+           await axios.put("https://localhost:7133/api/Sale/UpdateSale/" + sale.find((u) => u.id === id).id || id,
             {
                  id :id,
-                 custname:custname,
-                 prodname:prodname,
-                 storename:storename,
-                 solddate:solddate,
+                 customerName:customerName,
+                 productName:productName,
+                 storeName:storeName,
+                 datesold:datesold,
             }); 
 
             alert("sales are updated");
             setId("");
-            setCustName("");
-            setProdName("");
-            setStoreName("");
-            setSoldDate("");
+            setcustomerName("");
+            setproductName("");
+            setstoreName("");
+            setdatesold("");
 
             Load();
         }
@@ -101,10 +110,10 @@ function Sale(){
         await axios.delete("https://localhost:7133/api/Sale/DeleteSale/" +id);
         alert("Sale is deleted successfully");
         setId("");
-        setCustName("");
-        setProdName("");
-        setStoreName("");
-        setSoldDate("");
+        setcustomerName("");
+        setproductName("");
+        setstoreName("");
+        setdatesold("");
         Load();
      }
   return (
@@ -140,9 +149,9 @@ function Sale(){
                   type="text"
                   class="ui input"
                   id="name"
-                  value={custname}
+                  value={customerName}
                   onChange={(event) => {
-                    setCustName(event.target.value);
+                    setcustomerName(event.target.value);
                   }}
                 />
               </Form.Field>
@@ -152,9 +161,9 @@ function Sale(){
                   type="text"
                   class="ui input"
                   id="prod"
-                  value={prodname}
+                  value={productName}
                   onChange={(event) => {
-                    setProdName(event.target.value);
+                    setproductName(event.target.value);
                   }}
                 />
               </Form.Field>
@@ -165,9 +174,9 @@ function Sale(){
                   type="text"
                   class="ui input"
                   id="store"
-                  value={storename}
+                  value={storeName}
                   onChange={(event) => {
-                    setStoreName(event.target.value);
+                    setstoreName(event.target.value);
                   }}
                 />
               </Form.Field>
@@ -176,10 +185,10 @@ function Sale(){
                 <input
                   type="text"
                   class="ui input"
-                  id="solddate"
-                  value={solddate}
+                  id="datesold"
+                  value={datesold}
                   onChange={(event) => {
-                    setSoldDate(event.target.value);
+                    setdatesold(event.target.value);
                   }}
                 />
               </Form.Field>
@@ -224,14 +233,18 @@ function Sale(){
                 <Table.Body>
                  <Table.Row>
               
-                 <Table.Cell scope="row">{sale.id}</Table.Cell>
-                 <Table.Cell>{sale.custname}</Table.Cell>
-                 <Table.Cell>{sale.prodname}</Table.Cell>
-                 <Table.Cell>{sale.storename}</Table.Cell>   
-                 <Table.Cell>{sale.solddate}</Table.Cell>   
+                 <Table.Cell key={sale.id} scope="row">{sale.id}</Table.Cell>
+                 <Table.Cell>{sale.customerName}</Table.Cell>
+                 <Table.Cell>{sale.productName}</Table.Cell>
+                 <Table.Cell>{sale.storeName}</Table.Cell>   
+                 <Table.Cell>{sale.datesold}</Table.Cell>   
                  <Table.Cell> 
 
-     <Modal trigger={<Button color='yellow' onClick={() => editSale(sale)} >Edit </Button>} >
+     <Modal 
+     onClose={() => editsetOpen(false)}
+     onOpen={() => editsetOpen(true)}
+     open={editopen}
+     trigger={<Button color='yellow' onClick={() => editSale(sale)} >Edit </Button>} >
       <Modal.Header>Edit Sale</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -253,9 +266,9 @@ function Sale(){
              type="text"
              class="ui input"
              id="name"
-             value={custname}
+             value={customerName}
              onChange={(event) => {
-               setCustName(event.target.value);
+               setcustomerName(event.target.value);
              }}
            />
          </Form.Field>
@@ -265,9 +278,9 @@ function Sale(){
              type="text"
              class="ui input"
              id="Price"
-             value={prodname}
+             value={productName}
              onChange={(event) => {
-               setProdName(event.target.value);
+               setproductName(event.target.value);
              }}
            />
          </Form.Field>   
@@ -277,9 +290,9 @@ function Sale(){
              type="text"
              class="ui input"
              id="Price"
-             value={storename}
+             value={storeName}
              onChange={(event) => {
-               setStoreName(event.target.value);
+               setstoreName(event.target.value);
              }}
            />
          </Form.Field>  
@@ -289,9 +302,9 @@ function Sale(){
              type="text"
              class="ui input"
              id="Price"
-             value={solddate}
+             value={datesold}
              onChange={(event) => {
-               setSoldDate(event.target.value);
+               setdatesold(event.target.value);
              }}
            />
          </Form.Field>  
@@ -300,7 +313,7 @@ function Sale(){
       </Modal.Content>
       <Modal.Actions>
         <Button color='green' onClick={Update}>Edit</Button>
-        <Button color='black'>Cancel</Button>
+        <Button color='black'onClick={() => editsetOpen(false)}>Cancel</Button>
       </Modal.Actions>
     </Modal>
     </Table.Cell>
@@ -308,9 +321,9 @@ function Sale(){
 
     <Table.Cell>
       <Modal 
-       onnewClose={() => newsetOpen(false)}
-       onnewOpen={() => newsetOpen(true)}
-       newopen={newopen}
+       onClose={() => deletesetOpen(false)}
+       onOpen={() => deletesetOpen(true)}
+       open={deleteopen}
       trigger={<Button color='red'>Delete </Button>} >
       <Modal.Header>Delete Sale</Modal.Header>
       <Modal.Content>
@@ -319,7 +332,7 @@ function Sale(){
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => newsetOpen(false)}>
+        <Button color='black' onClick={() => deletesetOpen(false)}>
           Cancel
         </Button>
         <Button color='red' onClick={() => DeleteSale(sale.id)}>Delete</Button>

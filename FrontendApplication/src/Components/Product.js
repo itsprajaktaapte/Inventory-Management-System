@@ -12,7 +12,8 @@ function Product()
     const[price,setPrice] = useState("");
 
     const [open, setOpen] = useState(false)
-    const [newopen, newsetOpen] = useState(false)
+    const [editopen, editsetOpen] = useState(false)
+    const [deleteopen, deletesetOpen] = useState(false)
 
     const [product, setProducts] = useState([]);
     
@@ -64,7 +65,7 @@ function Product()
       event.preventDefault();
       try 
       {
-        await axios.patch("https://localhost:7133/api/Product/UpdateProduct/"+ product.find((u) => u.id === id) || id,
+        await axios.put("https://localhost:7133/api/Product/UpdateProduct/"+ product.find((u) => u.id === id) || id,
         {
             id : id,
             name : name,
@@ -196,7 +197,11 @@ function Product()
                     
                  <Table.Cell> 
 
-     <Modal trigger={<Button color='yellow' onClick={() => editProduct(product)} >Edit </Button>} >
+     <Modal 
+      onClose={() => editsetOpen(false)}
+      onOpen={() => editsetOpen(true)}
+      open={editopen}
+     trigger={<Button color='yellow' onClick={() => editProduct(product)} >Edit </Button>} >
       <Modal.Header>Edit Product</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -241,7 +246,7 @@ function Product()
       </Modal.Content>
       <Modal.Actions>
         <Button color='green' onClick={update}>Edit</Button>
-        <Button color='black'>Cancel</Button>
+        <Button color='black'onClick={() => editsetOpen(false)}>Cancel</Button>
       </Modal.Actions>
     </Modal>
 
@@ -251,9 +256,9 @@ function Product()
                 <Table.Cell>
 
       <Modal 
-       onnewClose={() => newsetOpen(false)}
-       onnewOpen={() => newsetOpen(true)}
-       newopen={newopen}
+       onClose={() => deletesetOpen(false)}
+       onOpen={() => deletesetOpen(true)}
+       open={deleteopen}
       trigger={<Button color='red'>Delete </Button>} >
       <Modal.Header>Delete Product</Modal.Header>
       <Modal.Content>
@@ -262,7 +267,7 @@ function Product()
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => newsetOpen(false)}>
+        <Button color='black' onClick={() => deletesetOpen(false)}>
           Cancel
         </Button>
         <Button color='red' onClick={() => DeleteProduct(product.id)}>Delete</Button>

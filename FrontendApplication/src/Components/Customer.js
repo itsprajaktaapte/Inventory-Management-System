@@ -9,8 +9,9 @@ function Customer() {
     const [address, setAddress] = useState("");
 
     const [open, setOpen] = useState(false)
-    const [newopen, newsetOpen] = useState(false)
-
+    const [editopen, editsetOpen] = useState(false)
+    const [deleteopen, deletesetOpen] = useState(false)
+    
     const [customers, setUsers] = useState([]);
     
       
@@ -64,7 +65,7 @@ function Customer() {
       async function update(event) {
         event.preventDefault();
         try {
-      await axios.patch("https://localhost:7133/api/Customer/UpdateCustomer/"+ customers.find((u) => u.id === id).id || id,
+      await axios.put("https://localhost:7133/api/Customer/UpdateCustomer/"+ customers.find((u) => u.id === id).id || id,
             {
             id: id,
             name: name,
@@ -147,12 +148,11 @@ function Customer() {
         <Button color='black' onClick={() => setOpen(false)}>
           Cancel
         </Button>
-        <Button
-          content="Create" onClick={save}
-          labelPosition='right'
-          icon='checkmark'
+        <Button color='green' content="Create" onClick={save}
+          //labelPosition='right'
+          //icon='checkmark'
           // onClick={() => setOpen(false)}
-          positive
+          //positive
         />
       </Modal.Actions>
     </Modal>
@@ -170,15 +170,19 @@ function Customer() {
             
             {customers.map(function fn(customer) {
               return (
-                <Table.Body>
-                 <Table.Row>
-                 <Table.Cell scope="row">{customer.id}  </Table.Cell>
+                <Table.Body key={customer.id}>
+                 <Table.Row >
+                 <Table.Cell  scope="row">{customer.id}  </Table.Cell>
                  <Table.Cell>{customer.name}</Table.Cell>
                  <Table.Cell>{customer.address}</Table.Cell>
                     
                  <Table.Cell> 
 
-     <Modal trigger={<Button color='yellow' onClick={() => editCustomer(customer)} >Edit </Button>} >
+     <Modal 
+      onClose={() => editsetOpen(false)}
+      onOpen={() => editsetOpen(true)}
+      open={editopen}
+     trigger={<Button color='yellow' onClick={() => editCustomer(customer)} >Edit </Button>} >
       <Modal.Header>Edit Customer</Modal.Header>
       <Modal.Content>
         <Modal.Description>
@@ -223,7 +227,7 @@ function Customer() {
       </Modal.Content>
       <Modal.Actions>
         <Button color='green' onClick={update}>Edit</Button>
-        <Button color='black'>Cancel</Button>
+        <Button color='black' onClick={() => editsetOpen(false)}>Cancel</Button>
       </Modal.Actions>
     </Modal>
 
@@ -233,9 +237,9 @@ function Customer() {
                 <Table.Cell>
 
       <Modal 
-       onnewClose={() => newsetOpen(false)}
-       onnewOpen={() => newsetOpen(true)}
-       newopen={newopen}
+       onClose={() => deletesetOpen(false)}
+       onOpen={() => deletesetOpen(true)}
+       open={deleteopen}
       trigger={<Button color='red'>Delete </Button>} >
       <Modal.Header>Delete Customer</Modal.Header>
       <Modal.Content>
@@ -244,7 +248,7 @@ function Customer() {
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => newsetOpen(false)}>
+        <Button color='black' onClick={() => deletesetOpen(false)}>
           Cancel
         </Button>
         <Button color='red' onClick={() => DeleteCustomer(customer.id)}>Delete</Button>
